@@ -5,7 +5,7 @@ Created on Thu Oct  1 12:34:11 2020
 @author: leonard
 """
 import configparser
-from aiComputerGestureControl.definitions import CONFIG_FOLDER
+from definitions import CONFIG_FOLDER
     
 def get_config_param(section, field):
     config = configparser.ConfigParser()

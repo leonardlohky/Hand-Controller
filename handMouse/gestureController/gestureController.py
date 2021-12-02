@@ -4,8 +4,8 @@ import time
 import autopy
 import pyautogui
 
-from aiComputerGestureControl.utils import get_config_param
-from aiComputerGestureControl.gestureController import handTrackingModule as htm
+from utils import get_config_param
+from gestureController import handTrackingModule as htm
 
 class GestureController():
     def __init__(self):

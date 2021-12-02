@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from aiComputerGestureControl.gestureController import gestureController
+from gestureController import gestureController
 
 if __name__ == "__main__":
     controller = gestureController.GestureController()
