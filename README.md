@@ -5,11 +5,6 @@ Hand-Controller is a gesture-based recognition system to control your computer.
 It can be used to move the pointer, click and scroll. Also included is a virtual 
 gesture-controlled keyboard.
 
-## Getting Started
-### Pre-requisites
-Python: 3.8.5
-Environment: Anaconda. Download link [here](https://www.anaconda.com/products/individual)
-
 ## Features
 ### Gesture Recognition:
 <details>
@@ -53,6 +48,12 @@ Hover over the key with your index finger that you wish to press. After that, pe
 the Left Click gesture as described before to press the key. To go back to "Mouse"
 mode, simply hover over the "Mouse" key on the virtual keyboard and perform a
 Left Click gesture.
+
+## Getting Started
+### Pre-requisites
+Python: 3.8.5
+Environment: Anaconda. Download link [here](https://www.anaconda.com/products/individual)
+Hardware: A computer with webcam
 
 ### 1. Requirements.
 Install the necessary required packages through the provided `requirements.txt`
