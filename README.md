@@ -27,3 +27,9 @@ python main.py
 
 ## License
 Distributed under the [MIT License](LICENSE)
+
+## Acknowledgement
+This package was developed based on the original codes by Murtaza's Workshop,
+which include:
+- [AI Virtual Mouse](https://www.youtube.com/watch?v=8gPONnGIPgw)
+- [AI Virtual Keyboard using OpenCV](https://www.youtube.com/watch?v=jzXZVFqEE2I&t=212s)
