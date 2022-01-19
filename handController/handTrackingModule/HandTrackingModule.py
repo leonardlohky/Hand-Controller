@@ -8,6 +8,7 @@ Website: https://www.computervision.zone/
 
 import cv2
 import mediapipe as mp
+import numpy as np
 import math
 
 
@@ -36,6 +37,7 @@ class HandDetector:
                                         min_detection_confidence=self.detectionCon, min_tracking_confidence = self.minTrackCon)
         self.mpDraw = mp.solutions.drawing_utils
         self.tipIds = [4, 8, 12, 16, 20]
+        self.joint_list = [[4,3,2,0], [8,7,6,5], [12,11,10,9], [16,15,14,13], [20,19,18,17]]
         self.fingers = []
         self.lmList = []
 
@@ -96,8 +98,17 @@ class HandDetector:
             return allHands,img
         else:
             return allHands
-
-    def fingersUp(self,myHand):
+        
+    def findOrientation(self, lmList):
+        wrist = lmList[0]
+        middleFingerTip = lmList[12]
+        
+        radians = np.arctan2(wrist[1] - middleFingerTip[1], wrist[0] - middleFingerTip[0])
+        angle = np.abs(radians * 180.0 / np.pi)
+        
+        return angle
+    
+    def fingersUp(self, myHand):
         """
         Finds how many fingers are open and returns in a list.
         Considers left and right hands separately
@@ -126,8 +137,40 @@ class HandDetector:
                 else:
                     fingers.append(0)
         return fingers
+    
+    def fingersUp_exp(self, myHand):
+        """
+        Finds how many fingers are open and returns in a list.
+        Considers left and right hands separately
+        :return: List of which fingers are up
+        """
+        myHandType =myHand["type"]
+        myLmList = myHand["lmList"]
+        if self.results.multi_hand_landmarks:
+            fingers = []
+            # Thumb
+            if myHandType == "Right":
+                if myLmList[self.tipIds[0]][0] > myLmList[self.tipIds[0] - 1][0]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
+            else:
+                if myLmList[self.tipIds[0]][0] < myLmList[self.tipIds[0] - 1][0]:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
 
-    def findDistance(self,p1, p2, img=None):
+            # 4 Fingers
+            for id in range(1, 5):
+                dist, _ = self.findDistance(myLmList[self.joint_list[id][0]], myLmList[self.joint_list[id][-1]])
+                if dist > 70:
+                    fingers.append(1)
+                else:
+                    fingers.append(0)
+                    
+        return fingers
+
+    def findDistance(self, p1, p2, img=None):
         """
         Find the distance between two landmarks based on their
         index numbers.
@@ -173,7 +216,7 @@ def main():
             centerPoint1 = hand1['center']  # center of the hand cx,cy
             handType1 = hand1["type"]  # Handtype Left or Right
 
-            fingers1 = detector.fingersUp(hand1)
+            fingers1 = detector.fingersUp_exp(hand1)
             print(fingers1)
 
             if len(hands) == 2:

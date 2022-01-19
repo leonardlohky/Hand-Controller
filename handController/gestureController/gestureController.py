@@ -6,8 +6,8 @@ import autopy
 import pyautogui
 
 from utils import get_config_param
-from handMouse.gestureKeyboard import gestureKeyboard
-from cvzone.HandTrackingModule import HandDetector
+from handController.gestureKeyboard import gestureKeyboard
+from handController.handTrackingModule.HandTrackingModule import HandDetector
         
 class GestureController():
     def __init__(self):
@@ -58,8 +58,8 @@ class GestureController():
                     # print(x1, y1, x2, y2)
                 
                 # 3. Check which fingers are up
-                fingers = self.detector.fingersUp(hand1)
-                # print(fingers)
+                fingers = self.detector.fingersUp_exp(hand1)
+                print(fingers)
                 
                 # 4. Only Index Finger : Moving Mode
                 if (len(fingers) > 0):

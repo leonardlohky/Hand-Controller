@@ -51,9 +51,9 @@ Left Click gesture.
 
 ## Getting Started
 ### Pre-requisites
-Python: 3.8.5
-Environment: Anaconda. Download link [here](https://www.anaconda.com/products/individual)
-Hardware: A computer with webcam
+- Python: 3.8.5
+- Environment: Anaconda. Download link [here](https://www.anaconda.com/products/individual)
+- Hardware: A computer with webcam
 
 ### 1. Requirements.
 Install the necessary required packages through the provided `requirements.txt`
