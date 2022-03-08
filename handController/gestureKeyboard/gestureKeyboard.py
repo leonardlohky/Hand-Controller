@@ -39,15 +39,23 @@ keys_symbols = [["[", "]", "{", "}", "#", "%", "^", "*", "+", "="],
                 ["ABC", "mouse", "space", ".", "go"]]
  
 def drawAll(img, buttonList):
+    overlay = img.copy()
+    
     for button in buttonList:
         x, y = button.pos
         w, h = button.size
-        cvzone.cornerRect(img, (button.pos[0], button.pos[1], button.size[0], button.size[1]),
+        cvzone.cornerRect(overlay, (button.pos[0], button.pos[1], button.size[0], button.size[1]),
                           20, rt=0)
-        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), cv2.FILLED)
-        cv2.putText(img, button.text, (x + 10, y + 28),
+        cv2.rectangle(overlay, (x, y), (x + w, y + h), (255, 0, 255), cv2.FILLED)
+        cv2.putText(overlay, button.text, (x + 10, y + 28),
                     cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2)
-    return img
+        
+        alpha = 0.4  # Transparency factor.
+
+        # Following line overlays transparent rectangle over the image
+        img_new = cv2.addWeighted(overlay, alpha, img, 1 - alpha, 0)
+
+    return img_new
  
 class Button():
     def __init__(self, pos, text, size=[45, 45]):

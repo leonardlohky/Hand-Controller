@@ -5,10 +5,17 @@ import time
 import autopy
 import pyautogui
 
+from enum import IntEnum
+
 from utils import get_config_param
 from handController.gestureKeyboard import gestureKeyboard
 from handController.handTrackingModule.HandTrackingModule import HandDetector
         
+# Mode
+class Mode(IntEnum):
+    NEUTRAL = 0
+    CURSOR = 1
+    
 class GestureController():
     def __init__(self):
         # Load config params
@@ -24,6 +31,7 @@ class GestureController():
         self.wScr, self.hScr = autopy.screen.size()
     
         self.stopped = False
+        self.mode = Mode.NEUTRAL
         self.gestureKeyboard = gestureKeyboard.GestureKeyboard()
         
     def cleanup(self):
@@ -58,12 +66,13 @@ class GestureController():
                     # print(x1, y1, x2, y2)
                 
                 # 3. Check which fingers are up
-                fingers = self.detector.fingersUp_exp(hand1)
+                fingers = self.detector.fingersUp(hand1)
                 print(fingers)
                 
                 # 4. Only Index Finger : Moving Mode
                 if (len(fingers) > 0):
                     if fingers[1] == 1 and fingers[2] == 0:
+                        self.mode = Mode.CURSOR
                         # 4a. Convert Coordinates
                         x3 = np.interp(x1, (self.frameR, self.wCam - self.frameR), (0, self.wScr))
                         y3 = np.interp(y1, (self.frameR, self.hCam - self.frameR), (0, self.hScr))
@@ -107,7 +116,7 @@ class GestureController():
                         plocX, plocY = clocX, clocY
                         
                     # 7. Index, middle, ring and pinky fingers are up : keyboard
-                    elif fingers[1] == 0 and fingers[1] == 1 and fingers[2] == 1 and fingers[3] == 1 and fingers[4] == 1:
+                    elif fingers[0] == 0 and fingers[1] == 1 and fingers[2] == 1 and fingers[3] == 1 and fingers[4] == 1:
                         self.bringup_keyboard(self.cap)
                 
                 # 7. Frame Rate
@@ -116,7 +125,14 @@ class GestureController():
                 pTime = cTime
                 cv2.putText(img, str(int(fps)), (20, 50), cv2.FONT_HERSHEY_PLAIN, 3,
                 (255, 0, 0), 3)
-                
+             
+            else:
+                if self.mode == Mode.CURSOR:
+                    autopy.mouse.click()
+                    time.sleep(0.15)
+                    
+                    self.mode = Mode.NEUTRAL
+                    
             # 8. Display
             cv2.imshow("Image", img)
             if cv2.waitKey(1) & 0xFF == ord('q'):
